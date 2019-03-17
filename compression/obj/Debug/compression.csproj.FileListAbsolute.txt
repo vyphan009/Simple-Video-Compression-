@@ -1,0 +1,10 @@
+C:\Users\vy phan\Documents\compression\compression\bin\Debug\compression.exe.config
+C:\Users\vy phan\Documents\compression\compression\bin\Debug\compression.exe
+C:\Users\vy phan\Documents\compression\compression\bin\Debug\compression.pdb
+C:\Users\vy phan\Documents\compression\compression\obj\Debug\compression.csprojAssemblyReference.cache
+C:\Users\vy phan\Documents\compression\compression\obj\Debug\compression.Form1.resources
+C:\Users\vy phan\Documents\compression\compression\obj\Debug\compression.Properties.Resources.resources
+C:\Users\vy phan\Documents\compression\compression\obj\Debug\compression.csproj.GenerateResource.cache
+C:\Users\vy phan\Documents\compression\compression\obj\Debug\compression.csproj.CoreCompileInputs.cache
+C:\Users\vy phan\Documents\compression\compression\obj\Debug\compression.exe
+C:\Users\vy phan\Documents\compression\compression\obj\Debug\compression.pdb
