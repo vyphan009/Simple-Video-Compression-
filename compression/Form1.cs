@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
 
 namespace compression
 {
@@ -29,6 +31,22 @@ namespace compression
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
 
             pictureBox2.Image = intraFrame;
+
+            long size = 0;
+            using (var ms = new MemoryStream())
+            {
+                bit1.Save(ms, ImageFormat.Jpeg);
+                size = ms.Length;
+            }
+            status1.Text = "origin size: " + size.ToString() + "bytes";
+            size = 0;
+            using (var ms = new MemoryStream())
+            {
+                intraFrame.Save(ms, ImageFormat.Jpeg);
+                size = ms.Length;
+            }
+
+            status2.Text = "compress size: " + size.ToString() + "bytes";
         }
 
         //open img1
@@ -63,6 +81,22 @@ namespace compression
             pictureBox4.SizeMode = PictureBoxSizeMode.StretchImage;
 
             pictureBox4.Image = interFrame;
+            long size = 0;
+            using (var ms = new MemoryStream())
+            {
+                bit2.Save(ms, ImageFormat.Jpeg);
+                size = ms.Length;
+            }
+            status3.Text = "origin size: " + size.ToString() + "bytes";
+
+            size = 0;
+            using (var ms = new MemoryStream())
+            {
+                interFrame.Save(ms, ImageFormat.Jpeg);
+                size = ms.Length;
+            }
+
+            status4.Text = "compress size: " + size.ToString() + "bytes";
         }
 
         //save file
