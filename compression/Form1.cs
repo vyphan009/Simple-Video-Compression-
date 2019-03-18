@@ -135,6 +135,13 @@ namespace compression
             pictureBox2.Image = null;
             pictureBox3.Image = null;
             pictureBox4.Image = null;
+
+            status1.Text = "origin size: ";
+            status3.Text = "origin size: ";
+            status2.Text = "compress size: ";
+            status4.Text = "compress size: ";
+
+
                
         }
 

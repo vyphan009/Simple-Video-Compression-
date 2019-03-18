@@ -420,6 +420,9 @@ namespace compression
         //compression
         public Bitmap convertIntraFrame(Bitmap bit)
         {
+
+
+
             intraFrame = new Bitmap(bit.Width, bit.Height);
             width = intraFrame.Width;
             height = intraFrame.Height;
