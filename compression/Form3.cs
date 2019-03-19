@@ -150,7 +150,7 @@ namespace compression
         }
         private double[,] DCT(byte[,] arr)
         {
-            double[,] tmp = new double[arr.GetLength(0), arr.GetLength(1)];
+            double[,] tmp = new double[(arr.GetLength(0) + BLOCK_WIDTH - 1)/BLOCK_WIDTH * BLOCK_WIDTH, (arr.GetLength(1) + BLOCK_HEIGHT-1)/BLOCK_HEIGHT*BLOCK_HEIGHT];
 
             for (int h = 0; h < arr.GetLength(1); h += BLOCK_HEIGHT)
             {
@@ -170,7 +170,10 @@ namespace compression
                             {
                                 for (int y = 0; y < BLOCK_HEIGHT; y++)
                                 {
-                                    sum += arr[x + w, y + h] * Math.Cos((2 * x + 1) * u * Math.PI / (2 * BLOCK_WIDTH)) * Math.Cos((2 * y + 1) * v * Math.PI / (2 * BLOCK_HEIGHT));
+                                    if (x + w < arr.GetLength(0) && y + h < arr.GetLength(1))
+                                    {
+                                        sum += arr[x + w, y + h] * Math.Cos((2 * x + 1) * u * Math.PI / (2 * BLOCK_WIDTH)) * Math.Cos((2 * y + 1) * v * Math.PI / (2 * BLOCK_HEIGHT));
+                                    }
                                 }
                             }
 
@@ -181,9 +184,9 @@ namespace compression
             }
             return tmp;
         }
-        private byte[,] inverseDCT(double[,] arr)
+        private byte[,] inverseDCT(double[,] arr, int width, int height)
         {
-            byte[,] tmp = new byte[arr.GetLength(0), arr.GetLength(1)];
+            byte[,] tmp = new byte[width, height];
             for (int h = 0; h < arr.GetLength(1); h += BLOCK_HEIGHT)
             {
                 for (int w = 0; w < arr.GetLength(0); w += BLOCK_WIDTH)
@@ -193,19 +196,22 @@ namespace compression
                     {
                         for (int j = 0; j < BLOCK_HEIGHT; j++)
                         {
-                            double sum = 0;
-
-                            for (int u = 0; u < BLOCK_WIDTH; u++)
+                            if (i + w < width && j + h < height)
                             {
-                                double c_u = C(u);
+                                double sum = 0;
 
-                                for (int v = 0; v < BLOCK_HEIGHT; v++)
+                                for (int u = 0; u < BLOCK_WIDTH; u++)
                                 {
-                                    double c_v = C(v);
-                                    sum += ((2 * c_u * c_v) / SQRT_MN) * Math.Cos((2 * i + 1) * u * Math.PI / (2 * BLOCK_WIDTH)) * Math.Cos((2 * j + 1) * v * Math.PI / (2 * BLOCK_HEIGHT)) * arr[u + w, v + h];
+                                    double c_u = C(u);
+
+                                    for (int v = 0; v < BLOCK_HEIGHT; v++)
+                                    {
+                                        double c_v = C(v);
+                                        sum += ((2 * c_u * c_v) / SQRT_MN) * Math.Cos((2 * i + 1) * u * Math.PI / (2 * BLOCK_WIDTH)) * Math.Cos((2 * j + 1) * v * Math.PI / (2 * BLOCK_HEIGHT)) * arr[u + w, v + h];
+                                    }
                                 }
+                                tmp[i + w, j + h] = (byte)sum;
                             }
-                            tmp[i + w, j + h] = (byte)sum;
                         }
                     }
                 }
@@ -216,7 +222,7 @@ namespace compression
 
         private double[,] DCT(short[,] arr)
         {
-            double[,] tmp = new double[arr.GetLength(0), arr.GetLength(1)];
+            double[,] tmp = new double[(arr.GetLength(0) + BLOCK_WIDTH - 1) / BLOCK_WIDTH * BLOCK_WIDTH, (arr.GetLength(1) + BLOCK_HEIGHT - 1) / BLOCK_HEIGHT * BLOCK_HEIGHT];
 
             for (int h = 0; h < arr.GetLength(1); h += BLOCK_HEIGHT)
             {
@@ -236,7 +242,11 @@ namespace compression
                             {
                                 for (int y = 0; y < BLOCK_HEIGHT; y++)
                                 {
-                                    sum += arr[x + w, y + h] * Math.Cos((2 * x + 1) * u * Math.PI / (2 * BLOCK_WIDTH)) * Math.Cos((2 * y + 1) * v * Math.PI / (2 * BLOCK_HEIGHT));
+                                    if (x + w < arr.GetLength(0) && y + h < arr.GetLength(1))
+                                    {
+
+                                        sum += arr[x + w, y + h] * Math.Cos((2 * x + 1) * u * Math.PI / (2 * BLOCK_WIDTH)) * Math.Cos((2 * y + 1) * v * Math.PI / (2 * BLOCK_HEIGHT));
+                                    }
                                 }
                             }
 
@@ -247,9 +257,9 @@ namespace compression
             }
             return tmp;
         }
-        private short[,] inverseDCTInter(double[,] arr)
+        private short[,] inverseDCTInter(double[,] arr, int width, int height)
         {
-            short[,] tmp = new short[arr.GetLength(0), arr.GetLength(1)];
+            short[,] tmp = new short[width, height];
             for (int h = 0; h < arr.GetLength(1); h += BLOCK_HEIGHT)
             {
                 for (int w = 0; w < arr.GetLength(0); w += BLOCK_WIDTH)
@@ -259,19 +269,23 @@ namespace compression
                     {
                         for (int j = 0; j < BLOCK_HEIGHT; j++)
                         {
-                            double sum = 0;
-
-                            for (int u = 0; u < BLOCK_WIDTH; u++)
+                            if (i + w < width && j + h < height)
                             {
-                                double c_u = C(u);
+                                double sum = 0;
 
-                                for (int v = 0; v < BLOCK_HEIGHT; v++)
+                                for (int u = 0; u < BLOCK_WIDTH; u++)
                                 {
-                                    double c_v = C(v);
-                                    sum += ((2 * c_u * c_v) / SQRT_MN) * Math.Cos((2 * i + 1) * u * Math.PI / (2 * BLOCK_WIDTH)) * Math.Cos((2 * j + 1) * v * Math.PI / (2 * BLOCK_HEIGHT)) * arr[u + w, v + h];
+                                    double c_u = C(u);
+
+                                    for (int v = 0; v < BLOCK_HEIGHT; v++)
+                                    {
+                                        double c_v = C(v);
+                                        sum += ((2 * c_u * c_v) / SQRT_MN) * Math.Cos((2 * i + 1) * u * Math.PI / (2 * BLOCK_WIDTH)) * Math.Cos((2 * j + 1) * v * Math.PI / (2 * BLOCK_HEIGHT)) * arr[u + w, v + h];
+                                    }
                                 }
+
+                                tmp[i + w, j + h] = (short)sum;
                             }
-                            tmp[i + w, j + h] = (short)sum;
                         }
                     }
                 }
@@ -293,7 +307,7 @@ namespace compression
                     {
                         for (int h = 0; h < BLOCK_HEIGHT; h++)
                         {
-                            tmp[i + w, j + h] = (sbyte)Math.Max(Math.Min(Math.Round(arr[i + w, j + h] / quantiza_matrix[w, h]), sbyte.MaxValue), sbyte.MinValue);
+                            tmp[j + w, i + h] = (sbyte)Math.Max(Math.Min(Math.Round(arr[j + w, i + h] / quantiza_matrix[w, h]), sbyte.MaxValue), sbyte.MinValue);
 
                         }
                     }
@@ -313,7 +327,7 @@ namespace compression
                     {
                         for (int h = 0; h < BLOCK_HEIGHT; h++)
                         {
-                            tmp[i + w, j + h] = arr[i + w, j + h] * quantiza_matrix[w, h];
+                            tmp[j + w, i + h] = arr[j + w, i + h] * quantiza_matrix[w, h];
 
                         }
                     }
@@ -465,9 +479,9 @@ namespace compression
             CbDCT = invQuantization(CbQuant);
             CrDCT = invQuantization(CrQuant);
 
-            Y = inverseDCT(YDCT);
-            Cb = inverseDCT(CbDCT);
-            Cr = inverseDCT(CrDCT);
+            Y = inverseDCT(YDCT, width, height);
+            Cb = inverseDCT(CbDCT, Cb.GetLength(0), Cb.GetLength(1));
+            Cr = inverseDCT(CrDCT, Cr.GetLength(0), Cr.GetLength(1));
 
 
             unsubSampling(ref Cb, ref Cr);
@@ -527,9 +541,9 @@ namespace compression
             CbDCTInter = invQuantization(CbQuantInter);
             CrDCTInter = invQuantization(CrQuantInter);
 
-            YDif = inverseDCTInter(YDCTInter);
-            CbDif = inverseDCTInter(CbDCTInter);
-            CrDif = inverseDCTInter(CrDCTInter);
+            YDif = inverseDCTInter(YDCTInter, width, height);
+            CbDif = inverseDCTInter(CbDCTInter, CbInter.GetLength(0), CbInter.GetLength(1));
+            CrDif = inverseDCTInter(CrDCTInter, CrInter.GetLength(0), CrInter.GetLength(1));
 
             YInter = unCalcDifference(Y, YMoVec, YDif);
             CbInter = unCalcDifference(Cb, CbMoVec, CbDif);
@@ -550,7 +564,7 @@ namespace compression
         private short[,] calcDifference(byte[,] orgArr, byte[,] desArr, out Point[,] motion_vec)
         {
             short[,] dif = new short[orgArr.GetLength(0), orgArr.GetLength(1)];
-            motion_vec = new Point[orgArr.GetLength(0) / BLOCK_WIDTH, orgArr.GetLength(1) / BLOCK_HEIGHT];
+            motion_vec = new Point[(orgArr.GetLength(0) + BLOCK_WIDTH - 1) / BLOCK_WIDTH, (orgArr.GetLength(1) + BLOCK_HEIGHT - 1) / BLOCK_HEIGHT];
             for (int h = 0; h < orgArr.GetLength(1); h += BLOCK_HEIGHT)
             {
                 for (int w = 0; w < orgArr.GetLength(0); w += BLOCK_WIDTH)
@@ -567,11 +581,16 @@ namespace compression
                                 for (int y = 0; y < BLOCK_HEIGHT; y++)
                                 {
                                     byte tmp = 0;
+                                    byte des = 0;
                                     if(!((i+w + x) < 0 || (i + w + x) >= orgArr.GetLength(0) ||(j + h + y) < 0 || (j + h + y) >= orgArr.GetLength(1)))
                                     {
                                         tmp = orgArr[i + w + x, j + h + y];
                                     }
-                                    total += Math.Abs(desArr[w + x, h + y] - tmp);
+                                    if (!((w + x) < 0 || (w + x) >= orgArr.GetLength(0) || (h + y) < 0 || (h + y) >= orgArr.GetLength(1)))
+                                    {
+                                        des = desArr[w + x, h + y];
+                                    }
+                                    total += Math.Abs(des - tmp);
                                 }
                             }
 
@@ -590,12 +609,21 @@ namespace compression
                     {
                         for(int j = 0; j < BLOCK_HEIGHT; j++)
                         {
-                            byte tmp = 0;
-                            if (!((i + w + vec.X) < 0 || (i + w + vec.X) >= orgArr.GetLength(0) || (j + h + vec.Y) < 0 || (j + h + vec.Y) >= orgArr.GetLength(1)))
+                            if (w + i < orgArr.GetLength(0) && h + j < orgArr.GetLength(1))
                             {
-                                tmp = orgArr[i + w + vec.X, j + h + vec.Y];
+                                byte tmp = 0;
+                                byte des = 0;
+
+                                if (!((i + w + vec.X) < 0 || (i + w + vec.X) >= orgArr.GetLength(0) || (j + h + vec.Y) < 0 || (j + h + vec.Y) >= orgArr.GetLength(1)))
+                                {
+                                    tmp = orgArr[i + w + vec.X, j + h + vec.Y];
+                                }
+                                if (!((w + i) < 0 || (w + i) >= orgArr.GetLength(0) || (h + j) < 0 || (h + j) >= orgArr.GetLength(1)))
+                                {
+                                    des = desArr[i + w, j + h];
+                                }
+                                dif[i + w, j + h] = (short)(des - tmp);
                             }
-                            dif[i+w, j+h] = (short) (desArr[i + w, j + h] - tmp);
                         }
                     }
                 }
@@ -613,15 +641,18 @@ namespace compression
                     {
                         for(int y = 0; y < BLOCK_HEIGHT; y++)
                         {
-
-                            byte tmp = 0;
-                            int posX = x + w + motion_vec[w / BLOCK_WIDTH, h / BLOCK_HEIGHT].X;
-                            int posY = y + h + motion_vec[w / BLOCK_WIDTH, h / BLOCK_HEIGHT].Y;
-                            if (!(posX < 0 || posX >= orgArr.GetLength(0) || posY < 0 || posY >= orgArr.GetLength(1)))
+                            if (w + x < orgArr.GetLength(0) && h + y < orgArr.GetLength(1))
                             {
-                                tmp = orgArr[posX, posY];
+
+                                byte tmp = 0;
+                                int posX = x + w + motion_vec[w / BLOCK_WIDTH, h / BLOCK_HEIGHT].X;
+                                int posY = y + h + motion_vec[w / BLOCK_WIDTH, h / BLOCK_HEIGHT].Y;
+                                if (!(posX < 0 || posX >= orgArr.GetLength(0) || posY < 0 || posY >= orgArr.GetLength(1)))
+                                {
+                                    tmp = orgArr[posX, posY];
+                                }
+                                desArr[w + x, h + y] = (byte)Math.Max(Math.Min((tmp + dif[w + x, h + y]), 255.0), 0);
                             }
-                            desArr[w+x, h+y]=(byte) Math.Max(Math.Min((tmp + dif[w+x, h+y]), 255.0), 0);
                         }
                     }
                 }
@@ -667,8 +698,8 @@ namespace compression
             {
                 for(int j = 0; j < y; j++)
                 {
-                    YMoVec[i, j].X = binaryReader.ReadInt32();
-                    YMoVec[i, j].Y = binaryReader.ReadInt32();
+                    YMoVec[i, j].X = binaryReader.ReadSByte();
+                    YMoVec[i, j].Y = binaryReader.ReadSByte();
                 }
             }
 
@@ -679,8 +710,8 @@ namespace compression
             {
                 for (int j = 0; j < y; j++)
                 {
-                    CbMoVec[i, j].X = binaryReader.ReadInt32();
-                    CbMoVec[i, j].Y = binaryReader.ReadInt32();
+                    CbMoVec[i, j].X = binaryReader.ReadSByte();
+                    CbMoVec[i, j].Y = binaryReader.ReadSByte();
                 }
             }
 
@@ -691,8 +722,8 @@ namespace compression
             {
                 for (int j = 0; j < y; j++)
                 {
-                    CrMoVec[i, j].X = binaryReader.ReadInt32();
-                    CrMoVec[i, j].Y = binaryReader.ReadInt32();
+                    CrMoVec[i, j].X = binaryReader.ReadSByte();
+                    CrMoVec[i, j].Y = binaryReader.ReadSByte();
                 }
             }
 
@@ -712,9 +743,9 @@ namespace compression
             CbDCT = invQuantization(CbQuant);
             CrDCT = invQuantization(CrQuant);
 
-            Y = inverseDCT(YDCT);
-            Cb = inverseDCT(CbDCT);
-            Cr = inverseDCT(CrDCT);
+            Y = inverseDCT(YDCT, width, height);
+            Cb = inverseDCT(CbDCT, Cb.GetLength(0), Cb.GetLength(1));
+            Cr = inverseDCT(CrDCT, Cr.GetLength(0), Cr.GetLength(1));
 
 
             unsubSampling(ref Cb, ref Cr);
@@ -730,9 +761,9 @@ namespace compression
             CbDCTInter = invQuantization(CbQuantInter);
             CrDCTInter = invQuantization(CrQuantInter);
 
-            YDif = inverseDCTInter(YDCTInter);
-            CbDif = inverseDCTInter(CbDCTInter);
-            CrDif = inverseDCTInter(CrDCTInter);
+            YDif = inverseDCTInter(YDCTInter, width, height);
+            CbDif = inverseDCTInter(CbDCTInter, CbInter.GetLength(0), CbInter.GetLength(1));
+            CrDif = inverseDCTInter(CrDCTInter, CrInter.GetLength(0), CrInter.GetLength(1));
 
             YInter = unCalcDifference(Y, YMoVec, YDif);
             CbInter = unCalcDifference(Cb, CbMoVec, CbDif);
@@ -778,8 +809,8 @@ namespace compression
             {
                 for (int y = 0; y < YMoVec.GetLength(1); y++)
                 {
-                    binaryWriter.Write(YMoVec[x, y].X);
-                    binaryWriter.Write(YMoVec[x, y].Y);
+                    binaryWriter.Write((sbyte)YMoVec[x, y].X);
+                    binaryWriter.Write((sbyte)YMoVec[x, y].Y);
                 }
             }
 
@@ -789,8 +820,8 @@ namespace compression
             {
                 for (int y = 0; y < CbMoVec.GetLength(1); y++)
                 {
-                    binaryWriter.Write(CbMoVec[x, y].X);
-                    binaryWriter.Write(CbMoVec[x, y].Y);
+                    binaryWriter.Write((sbyte)CbMoVec[x, y].X);
+                    binaryWriter.Write((sbyte)CbMoVec[x, y].Y);
                 }
             }
             binaryWriter.Write(CrMoVec.GetLength(0));
@@ -799,11 +830,16 @@ namespace compression
             {
                 for (int y = 0; y < CrMoVec.GetLength(1); y++)
                 {
-                    binaryWriter.Write(CrMoVec[x, y].X);
-                    binaryWriter.Write(CrMoVec[x, y].Y);
+                    binaryWriter.Write((sbyte)CrMoVec[x, y].X);
+                    binaryWriter.Write((sbyte)CrMoVec[x, y].Y);
                 }
             }
             binaryWriter.Close();
+        }
+        public int fileSize()
+        {
+            return YMoVec.Length*2 + CbMoVec.Length*2 + CrMoVec.Length*2 + YEncodeInter.Count + CbEncodeInter.Count + CrEncodeInter.Count
+                +YEncode.Count + CbEncode.Count + CrEncode.Count;
         }
 
     }

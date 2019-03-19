@@ -29,24 +29,8 @@ namespace compression
         {
             intraFrame = this.form3.convertIntraFrame(bit1);
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-
             pictureBox2.Image = intraFrame;
 
-            long size = 0;
-            using (var ms = new MemoryStream())
-            {
-                bit1.Save(ms, ImageFormat.Jpeg);
-                size = ms.Length;
-            }
-            status1.Text = "origin size: " + size.ToString() + "bytes";
-            size = 0;
-            using (var ms = new MemoryStream())
-            {
-                intraFrame.Save(ms, ImageFormat.Jpeg);
-                size = ms.Length;
-            }
-
-            status2.Text = "compress size: " + size.ToString() + "bytes";
         }
 
         //open img1
@@ -56,6 +40,7 @@ namespace compression
             openFile.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp";
             if (openFile.ShowDialog() == DialogResult.OK)
             {
+                
                 bit1 = new Bitmap(openFile.FileName);
                 pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
                 pictureBox1.Image = bit1;
@@ -75,28 +60,19 @@ namespace compression
             }
         }
 
+
         private void Compression(object sender, EventArgs e)
         {
             Bitmap interFrame = this.form3.convertInterFrame(bit2);
             pictureBox4.SizeMode = PictureBoxSizeMode.StretchImage;
 
             pictureBox4.Image = interFrame;
-            long size = 0;
-            using (var ms = new MemoryStream())
-            {
-                bit2.Save(ms, ImageFormat.Jpeg);
-                size = ms.Length;
-            }
-            status3.Text = "origin size: " + size.ToString() + "bytes";
 
-            size = 0;
-            using (var ms = new MemoryStream())
-            {
-                interFrame.Save(ms, ImageFormat.Jpeg);
-                size = ms.Length;
-            }
+            
+            status1.Text = "origin size: " + (interFrame.Width* interFrame.Height* 3*2) + "bytes";
 
-            status4.Text = "compress size: " + size.ToString() + "bytes";
+            int size = this.form3.fileSize();
+            status2.Text = "compress size: " + size + "bytes";
         }
 
         //save file
@@ -137,12 +113,7 @@ namespace compression
             pictureBox4.Image = null;
 
             status1.Text = "origin size: ";
-            status3.Text = "origin size: ";
             status2.Text = "compress size: ";
-            status4.Text = "compress size: ";
-
-
-               
         }
 
         

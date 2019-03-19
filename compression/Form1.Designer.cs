@@ -55,12 +55,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.status2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.status3 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.status4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -234,23 +230,13 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
             this.status1,
-            this.status2,
-            this.toolStripStatusLabel2,
-            this.status3,
-            this.status4});
+            this.status2});
             this.statusStrip1.Location = new System.Drawing.Point(0, 686);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(800, 22);
             this.statusStrip1.TabIndex = 10;
             this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(51, 17);
-            this.toolStripStatusLabel1.Text = "Image1-";
             // 
             // status1
             // 
@@ -263,24 +249,6 @@
             this.status2.Name = "status2";
             this.status2.Size = new System.Drawing.Size(86, 17);
             this.status2.Text = "compress size: ";
-            // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(51, 17);
-            this.toolStripStatusLabel2.Text = "Image2-";
-            // 
-            // status3
-            // 
-            this.status3.Name = "status3";
-            this.status3.Size = new System.Drawing.Size(66, 17);
-            this.status3.Text = "origin size: ";
-            // 
-            // status4
-            // 
-            this.status4.Name = "status4";
-            this.status4.Size = new System.Drawing.Size(83, 17);
-            this.status4.Text = "compress size:";
             // 
             // Form1
             // 
@@ -338,10 +306,6 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel status1;
         private System.Windows.Forms.ToolStripStatusLabel status2;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-        private System.Windows.Forms.ToolStripStatusLabel status3;
-        private System.Windows.Forms.ToolStripStatusLabel status4;
     }
 }
 
